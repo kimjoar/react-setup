@@ -12,6 +12,7 @@ var watchify = require('watchify');
 var Immutable = require('immutable');
 var streamify = require('gulp-streamify');
 var browserify = require('browserify');
+var runSequence = require('run-sequence');
 
 var paths = {
     js: {
@@ -32,19 +33,24 @@ var watchifyOpts = browserifyOpts.set('watch', true);
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['build-css', 'build-js']);
-gulp.task('watch', ['watch-css', 'watch-js']);
+gulp.task('build', function(cb) {
+    runSequence('clean', ['build-css', 'build-js'], cb);
+});
 
-gulp.task('build-js', ['clean'], browserifyTask(browserifyOpts.toJS()));
-gulp.task('watch-js', ['clean'], browserifyTask(watchifyOpts.toJS()));
+gulp.task('watch', function(cb) {
+    runSequence('clean', ['watch-css', 'watch-js'], cb);
+});
 
-gulp.task('build-css', ['clean'], function () {
+gulp.task('build-js', browserifyTask(browserifyOpts.toJS()));
+gulp.task('watch-js', browserifyTask(watchifyOpts.toJS()));
+
+gulp.task('build-css', function () {
     return gulp.src(paths.css.src)
         .pipe(myth({ compress: true }))
         .pipe(rename('bundle.css'))
         .pipe(gulp.dest(paths.dist));
 });
-gulp.task('watch-css', ['clean', 'build-css'], function() {
+gulp.task('watch-css', ['build-css'], function() {
     gulp.watch(paths.css.all, ['build-css']);
 });
 

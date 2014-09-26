@@ -25,6 +25,7 @@
     "gulp-uglify": "^1.0.0",
     "gulp-util": "^3.0.1",
     "reactify": "^0.14.0",
+    "run-sequence": "^0.3.7",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^1.0.2"
   }
