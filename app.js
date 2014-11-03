@@ -30,4 +30,6 @@ app.use(function(err, req, res, next) {
 });
 
 http.createServer(app)
-    .listen(9999, '0.0.0.0');
+    .listen(9999, function() {
+        console.log('Running on port 9999');
+    });
